@@ -1,10 +1,11 @@
 % Código principal que define planta, requisitos, executa simulação e animação
 
-addpath('dinamica');
-addpath('modelos');
-addpath('controladores');
-addpath('simulacao');
-addpath('visualizacao');
+root = fileparts(mfilename('fullpath'));
+addpath(fullfile(root, '..', 'dinamica'));
+addpath(fullfile(root, '..', 'modelos'));
+addpath(fullfile(root, '..', 'controladores'));
+addpath(fullfile(root, '..', 'simulacao'));
+addpath(fullfile(root, '..', 'visualizacao'));
 
 planta = obterPlantaMulticoptero();
 requisitos = obterRequisitos();
