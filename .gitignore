@@ -1,0 +1,33 @@
+# Arquivos gerados por simulações
+*.asv
+*.autosave
+*.bak
+*.mdl.autosave
+*.slxc
+*.slx.autosave
+*.mldatx
+
+# Dados e resultados de simulação
+*.mat
+*.out
+*.log
+*.txt
+
+# Vídeos gerados
+*.avi
+*.mp4
+
+# Cache e outros
+*.mex*
+*.mlappinstall
+*.mlpkginstall
+.DS_Store
+*.class
+*.jar
+*.zip
+*.tmp
+*.user
+
+# Pastas do MATLAB ou temporárias
+simulinkcache/
+slprj/
