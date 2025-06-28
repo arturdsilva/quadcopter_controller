@@ -119,7 +119,7 @@ legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, 
        'Location', 'best', 'TextColor', 'w');
 
 % Para salvar vídeo
-video = VideoWriter(sprintf('multicoptero_3d_%c.avi', simulacao.experimento));
+video = VideoWriter(fullfile('..', 'resultados', sprintf('multicoptero_3d_%c.avi', simulacao.experimento)));
 video.FrameRate = 60;
 video.Quality = 100;
 open(video);
