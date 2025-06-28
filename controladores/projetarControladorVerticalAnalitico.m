@@ -1,0 +1,1 @@
+% Função para o projeto do controlador de Vertical Analitico
