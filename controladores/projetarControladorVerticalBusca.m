@@ -1,7 +1,8 @@
 % Função para o projeto do controlador de Vertical Busca
 
 function controlador = projetarControladorVerticalBusca(requisitos, planta)
-addpath('dinamica');
+root = fileparts(mfilename('fullpath'));
+addpath(fullfile(root, '..', 'dinamica'));
 
 % Numero de valores de cada parametro usados na grade
 N = 20;

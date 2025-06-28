@@ -2,8 +2,8 @@
 
 function controlador = projetarControladorHorizontalBusca(requisitosX,...
     requisitosTheta, planta)
-addpath('dinamica');
-
+root = fileparts(mfilename('fullpath'));
+addpath(fullfile(root, '..', 'dinamica'));
 % Numero de valores de cada parametro usados na grade
 N = 20;
 
