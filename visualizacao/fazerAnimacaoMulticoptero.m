@@ -11,9 +11,11 @@ y = simulacao.y.signals.values;
 z = simulacao.z.signals.values;
 theta = simulacao.theta.signals.values;
 phi = simulacao.phi.signals.values;
+psi = simulacao.psi.signals.values;
 f = simulacao.f.signals.values;
 tauy = simulacao.tauy.signals.values;
 taux = simulacao.taux.signals.values;
+tauz = simulacao.tauz.signals.values;
 l = planta.l;
 
 % Para ajustar os eixos do gráfico 3D
@@ -39,9 +41,11 @@ y = interp1(t, y, tempoVideo);
 z = interp1(t, z, tempoVideo);
 theta = interp1(t, theta, tempoVideo);
 phi = interp1(t, phi, tempoVideo);
+psi = interp1(t, psi, tempoVideo);
 f = interp1(t, f, tempoVideo);
 taux = interp1(t, taux, tempoVideo);
 tauy = interp1(t, tauy, tempoVideo);
+tauz = interp1(t, tauz, tempoVideo);
 
 % Calculando forças individuais dos rotores
 f1 = f / 4.0 - tauy / (2*l) + taux / (2*l);  % Rotor frontal esquerdo
@@ -60,8 +64,8 @@ close all;
 figure('Color', 'k');
 hold on;
 
-% Posições iniciais dos rotores
-[r1, r2, r3, r4] = computarPontosMulticoptero3D(x(1), y(1), z(1), theta(1), phi(1), l);
+% Posições iniciais dos rotores (agora incluindo psi)
+[r1, r2, r3, r4] = computarPontosMulticoptero3D(x(1), y(1), z(1), theta(1), phi(1), psi(1), l);
 
 % Desenho inicial do quadricóptero
 handleReferencia = plot3(xr(1), yr(1), zr(1), 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');
@@ -89,6 +93,10 @@ handleF2 = quiver3(r2(1), r2(2), r2(3), 0, 0, f2(1), 'y', 'LineWidth', 2, 'MaxHe
 handleF3 = quiver3(r3(1), r3(2), r3(3), 0, 0, f3(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
 handleF4 = quiver3(r4(1), r4(2), r4(3), 0, 0, f4(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
 
+% Seta indicadora da direção frontal do quadricóptero
+[direcaoFrontal] = computarDirecaoFrontal(x(1), y(1), z(1), psi(1), l);
+handleDirecao = quiver3(x(1), y(1), z(1), direcaoFrontal(1), direcaoFrontal(2), 0, 'm', 'LineWidth', 3, 'MaxHeadSize', 0.2);
+
 % Trajetória
 handleTrajetoria = plot3(x(1), y(1), z(1), 'b-', 'LineWidth', 1);
 
@@ -99,7 +107,7 @@ grid on;
 xlabel('X (m)', 'FontSize', 13, 'Color', 'w');
 ylabel('Y (m)', 'FontSize', 13, 'Color', 'w');
 zlabel('Z (m)', 'FontSize', 13, 'Color', 'w');
-title('Simulação 3D do Quadricóptero', 'FontSize', 14, 'Color', 'w');
+title('Simulação 3D do Quadricóptero com Guinada', 'FontSize', 14, 'Color', 'w');
 set(gca, 'FontSize', 13, 'Color', 'k', 'XColor', 'w', 'YColor', 'w', 'ZColor', 'w');
 set(gca, 'GridColor', 'w', 'GridAlpha', 0.6);
 
@@ -114,8 +122,8 @@ Z_chao = zeros(size(X_chao));
 surf(X_chao, Y_chao, Z_chao, 'FaceColor', [0.2 0.2 0.2], 'FaceAlpha', 0.4, 'EdgeColor', 'none');
 
 %Legenda:
-leg = legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, handleTrajetoria], ...
-             {'Referência', 'Centro', 'Chassi', 'Rotores', 'Forças', 'Trajetória'}, ...
+leg = legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, handleDirecao, handleTrajetoria], ...
+             {'Referência', 'Centro', 'Chassi', 'Rotores', 'Forças', 'Direção Frontal', 'Trajetória'}, ...
              'Location', 'best');
 
 % Configurar as propriedades da legenda
@@ -143,8 +151,8 @@ trajZ = z(1);
 
 % Loop de animação
 for i = 2:length(tempoVideo)
-    % Calcular posições dos rotores
-    [r1, r2, r3, r4] = computarPontosMulticoptero3D(x(i), y(i), z(i), theta(i), phi(i), l);
+    % Calcular posições dos rotores (agora incluindo psi)
+    [r1, r2, r3, r4] = computarPontosMulticoptero3D(x(i), y(i), z(i), theta(i), phi(i), psi(i), l);
     
     % Atualizar referência
     set(handleReferencia, 'XData', xr(i), 'YData', yr(i), 'ZData', zr(i));
@@ -172,6 +180,10 @@ for i = 2:length(tempoVideo)
     set(handleF3, 'XData', r3(1), 'YData', r3(2), 'ZData', r3(3), 'UData', 0, 'VData', 0, 'WData', f3(i));
     set(handleF4, 'XData', r4(1), 'YData', r4(2), 'ZData', r4(3), 'UData', 0, 'VData', 0, 'WData', f4(i));
     
+    % Atualizar direção frontal
+    [direcaoFrontal] = computarDirecaoFrontal(x(i), y(i), z(i), psi(i), l);
+    set(handleDirecao, 'XData', x(i), 'YData', y(i), 'ZData', z(i), 'UData', direcaoFrontal(1), 'VData', direcaoFrontal(2), 'WData', 0);
+    
     % Atualizar trajetória
     trajX = [trajX, x(i)];
     trajY = [trajY, y(i)];
@@ -189,8 +201,9 @@ fprintf('Vídeo salvo como: multicoptero_3d_%c.avi\n', simulacao.experimento);
 
 end
 
-function [r1, r2, r3, r4] = computarPontosMulticoptero3D(x, y, z, theta, phi, l)
+function [r1, r2, r3, r4] = computarPontosMulticoptero3D(x, y, z, theta, phi, psi, l)
 % Calcula as posições dos 4 rotores do quadricóptero no espaço 3D
+% Agora inclui o ângulo de guinada (psi)
 % r1: rotor frontal esquerdo
 % r2: rotor frontal direito  
 % r3: rotor traseiro direito
@@ -203,25 +216,48 @@ r2_local = [l/2, l/2, 0];    % Frontal direito
 r3_local = [-l/2, l/2, 0];   % Traseiro direito
 r4_local = [-l/2, -l/2, 0];  % Traseiro esquerdo
 
-% Aplicar rotações (ordem: phi em torno de X, theta em torno de Y)
-% Matriz de rotação para phi (roll)
+% Matrizes de rotação
+% Rotação em torno do eixo X (roll - phi)
 Rx = [1, 0, 0;
       0, cos(phi), -sin(phi);
       0, sin(phi), cos(phi)];
 
-% Matriz de rotação para theta (pitch)
+% Rotação em torno do eixo Y (pitch - theta)
 Ry = [cos(theta), 0, sin(theta);
       0, 1, 0;
       -sin(theta), 0, cos(theta)];
 
-% Matriz de rotação combinada
-R = Ry * Rx;
+% Rotação em torno do eixo Z (yaw - psi)
+Rz = [cos(psi), -sin(psi), 0;
+      sin(psi), cos(psi), 0;
+      0, 0, 1];
+
+% Matriz de rotação combinada (ordem: Rz * Ry * Rx)
+% Esta é a sequência de rotações Tait-Bryan Z-Y-X (yaw-pitch-roll)
+R = Rz * Ry * Rx;
 
 % Aplicar rotação e translação
 r1 = [x, y, z] + (R * r1_local')';
 r2 = [x, y, z] + (R * r2_local')';
 r3 = [x, y, z] + (R * r3_local')';
 r4 = [x, y, z] + (R * r4_local')';
+
+end
+
+function [direcaoFrontal] = computarDirecaoFrontal(x, y, z, psi, l)
+% Computa a direção frontal do quadricóptero baseada no ângulo de guinada
+% Retorna um vetor que aponta na direção frontal
+
+% Direção frontal local (eixo X local)
+direcao_local = [l/2, 0, 0];
+
+% Aplicar rotação de guinada
+Rz = [cos(psi), -sin(psi), 0;
+      sin(psi), cos(psi), 0;
+      0, 0, 1];
+
+% Calcular direção frontal no sistema global
+direcaoFrontal = (Rz * direcao_local')';
 
 end
 
