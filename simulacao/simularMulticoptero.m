@@ -14,6 +14,7 @@ assignin('base', 'y0', 0);
 assignin('base', 'z0', 0);
 assignin('base', 'theta0', 0);
 assignin('base', 'phi0', 0);
+assignin('base', 'psi0', 0);
 assignin('base', 'controlador', controlador);
 assignin('base', 'planta', planta);
 assignin('base', 'carga', carga);
