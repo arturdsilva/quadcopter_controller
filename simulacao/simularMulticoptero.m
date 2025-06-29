@@ -1,7 +1,7 @@
 % Simulação do sistema Multicoptero
 
 function simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr,...
-    carga, ventoX)
+    carga, ventoX, ventoY)
 controlador.m = planta.m;
 controlador.g = planta.g;
 
@@ -19,6 +19,7 @@ assignin('base', 'controlador', controlador);
 assignin('base', 'planta', planta);
 assignin('base', 'carga', carga);
 assignin('base', 'ventoX', ventoX);
+assignin('base', 'ventoY', ventoY);
 
 % Carregando o Simulink
 load_system('multicoptero');
