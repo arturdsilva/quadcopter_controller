@@ -47,11 +47,11 @@ taux = interp1(t, taux, tempoVideo);
 tauy = interp1(t, tauy, tempoVideo);
 tauz = interp1(t, tauz, tempoVideo);
 
-% Calculando forças individuais dos rotores
-f1 = f / 4.0 - tauy / (2*l) + taux / (2*l);  % Rotor frontal esquerdo
-f2 = f / 4.0 + tauy / (2*l) + taux / (2*l);  % Rotor frontal direito
-f3 = f / 4.0 + tauy / (2*l) - taux / (2*l);  % Rotor traseiro direito
-f4 = f / 4.0 - tauy / (2*l) - taux / (2*l);  % Rotor traseiro esquerdo
+% Calculando forças individuais dos rotores (configuração +)
+f1 = f / 4.0 + taux / l;                    % Rotor frontal
+f2 = f / 4.0 + tauy / l;                    % Rotor direito  
+f3 = f / 4.0 - taux / l;                    % Rotor traseiro
+f4 = f / 4.0 - tauy / l;                    % Rotor esquerdo
 
 % Fator de escala para visualização das forças
 escalaForca = 0.05;
@@ -70,9 +70,9 @@ hold on;
 % Desenho inicial do quadricóptero
 handleReferencia = plot3(xr(1), yr(1), zr(1), 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');
 
-% Chassi do quadricóptero (cruz)
-handleChassisX = plot3([r1(1), r3(1)], [r1(2), r3(2)], [r1(3), r3(3)], 'w-', 'LineWidth', 4);
-handleChassisY = plot3([r2(1), r4(1)], [r2(2), r4(2)], [r2(3), r4(3)], 'w-', 'LineWidth', 4);
+% Chassi do quadricóptero (cruz) - configuração +
+handleChassiFrontal = plot3([r1(1), r3(1)], [r1(2), r3(2)], [r1(3), r3(3)], 'w-', 'LineWidth', 4);
+handleChassisLateral = plot3([r2(1), r4(1)], [r2(2), r4(2)], [r2(3), r4(3)], 'w-', 'LineWidth', 4);
 
 % Centro do quadricóptero
 handleCentro = plot3(x(1), y(1), z(1), 'go', 'MarkerSize', 8, 'MarkerFaceColor', 'g');
@@ -122,7 +122,7 @@ Z_chao = zeros(size(X_chao));
 surf(X_chao, Y_chao, Z_chao, 'FaceColor', [0.2 0.2 0.2], 'FaceAlpha', 0.4, 'EdgeColor', 'none');
 
 %Legenda:
-leg = legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, handleDirecao, handleTrajetoria], ...
+leg = legend([handleReferencia, handleCentro, handleChassiFrontal, handleRotor1, handleF1, handleDirecao, handleTrajetoria], ...
              {'Referência', 'Centro', 'Chassi', 'Rotores', 'Forças', 'Direção Frontal', 'Trajetória'}, ...
              'Location', 'best');
 
@@ -161,8 +161,8 @@ for i = 2:length(tempoVideo)
     set(handleCentro, 'XData', x(i), 'YData', y(i), 'ZData', z(i));
     
     % Atualizar chassi
-    set(handleChassisX, 'XData', [r1(1), r3(1)], 'YData', [r1(2), r3(2)], 'ZData', [r1(3), r3(3)]);
-    set(handleChassisY, 'XData', [r2(1), r4(1)], 'YData', [r2(2), r4(2)], 'ZData', [r2(3), r4(3)]);
+    set(handleChassiFrontal, 'XData', [r1(1), r3(1)], 'YData', [r1(2), r3(2)], 'ZData', [r1(3), r3(3)]);
+    set(handleChassisLateral, 'XData', [r2(1), r4(1)], 'YData', [r2(2), r4(2)], 'ZData', [r2(3), r4(3)]);
     
     % Atualizar rotores
     [xCirc, yCirc, zCirc] = criarCirculoRotor(r1, l/8);
@@ -203,18 +203,18 @@ end
 
 function [r1, r2, r3, r4] = computarPontosMulticoptero3D(x, y, z, theta, phi, psi, l)
 % Calcula as posições dos 4 rotores do quadricóptero no espaço 3D
-% Agora inclui o ângulo de guinada (psi)
-% r1: rotor frontal esquerdo
-% r2: rotor frontal direito  
-% r3: rotor traseiro direito
-% r4: rotor traseiro esquerdo
+% Configuração em + com o ângulo de guinada (psi)
+% r1: rotor frontal
+% r2: rotor direito  
+% r3: rotor traseiro
+% r4: rotor esquerdo
 
 % Posições locais dos rotores (em relação ao centro)
-% Assumindo configuração em X
-r1_local = [l/2, -l/2, 0];   % Frontal esquerdo
-r2_local = [l/2, l/2, 0];    % Frontal direito
-r3_local = [-l/2, l/2, 0];   % Traseiro direito
-r4_local = [-l/2, -l/2, 0];  % Traseiro esquerdo
+% Configuração em + (plus): frente é um braço
+r1_local = [l, 0, 0];        % Rotor frontal
+r2_local = [0,-l, 0];        % Rotor direito
+r3_local = [-l, 0, 0];       % Rotor traseiro
+r4_local = [0, l, 0];       % Rotor esquerdo
 
 % Matrizes de rotação
 % Rotação em torno do eixo X (roll - phi)
@@ -246,9 +246,10 @@ end
 
 function [direcaoFrontal] = computarDirecaoFrontal(x, y, z, psi, l)
 % Computa a direção frontal do quadricóptero baseada no ângulo de guinada
+% Para configuração +, a frente é ao longo do eixo X local
 % Retorna um vetor que aponta na direção frontal
 
-% Direção frontal local (eixo X local)
+% Direção frontal local (eixo X local) - para configuração +
 direcao_local = [l/2, 0, 0];
 
 % Aplicar rotação de guinada

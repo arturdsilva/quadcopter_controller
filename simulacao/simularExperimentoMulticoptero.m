@@ -47,16 +47,21 @@ elseif experimento == 'e'
     zr.time = [0; tf];
     zr.signals.values = [1; 1];
     simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr, 0, -2);
- elseif experimento == 'f'
-     tf = 10;
-     t = (1+dt:dt:(tf-1))';
-     xr.time = [0; 1; t; tf];
-     xr.signals.values = [0; 0; cos(3 * 2 * pi * (t - 1) / (tf - 2) + pi / 2); 0];
-     yr.time = [0; 1; t; tf];
-     yr.signals.values = [0; 0; cos(3 * 2 * pi * (t - 1) / (tf - 2) + pi / 2); 0];
-     zr.time = [0; 1; t; tf];
-     zr.signals.values = [2; 2; sin(2 * 2 * pi * (t - 1) / (tf - 2)) + 2; 2];
-     simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr, 0, 0);
+elseif experimento == 'f'
+    tf = 12;  % Duração longa da simulação
+    t = (1+dt:dt:(tf-1))';
+
+    xr.time = [0; 1; t; tf];
+    xr.signals.values = [0; 0; cos(0.5 * 2 * pi * (t - 1) / (tf - 2) + pi / 2); 0];
+
+    yr.time = [0; 1; t; tf];
+    yr.signals.values = [0; 0; cos(0.5 * 2 * pi * (t - 1) / (tf - 2) + pi / 2); 0];
+
+    zr.time = [0; 1; t; tf];
+    zr.signals.values = [2; 2; sin(0.5 * 2 * pi * (t - 1) / (tf - 2)) + 2; 2];
+
+    simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr, 0, 0);
+
  elseif experimento == 'g'
      tf = 20;
      t = (1+dt:dt:(tf-1))';
