@@ -113,10 +113,16 @@ lighting gouraud;
 Z_chao = zeros(size(X_chao));
 surf(X_chao, Y_chao, Z_chao, 'FaceColor', [0.2 0.2 0.2], 'FaceAlpha', 0.4, 'EdgeColor', 'none');
 
-% Legenda
-legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, handleTrajetoria], ...
-       {'Referência', 'Centro', 'Chassi', 'Rotores', 'Forças', 'Trajetória'}, ...
-       'Location', 'best', 'TextColor', 'w');
+%Legenda:
+leg = legend([handleReferencia, handleCentro, handleChassisX, handleRotor1, handleF1, handleTrajetoria], ...
+             {'Referência', 'Centro', 'Chassi', 'Rotores', 'Forças', 'Trajetória'}, ...
+             'Location', 'best');
+
+% Configurar as propriedades da legenda
+set(leg, 'TextColor', 'w');           % Texto branco
+set(leg, 'Color', 'k');               % Fundo preto
+set(leg, 'EdgeColor', 'w');           % Borda branca
+set(leg, 'FontSize', 10);             % Tamanho da fonte (opcional)
 
 % Para salvar vídeo
 video = VideoWriter(fullfile('..', 'resultados', sprintf('multicoptero_3d_%c.avi', simulacao.experimento)));
