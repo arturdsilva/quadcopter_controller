@@ -4,11 +4,14 @@ function simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr,...
     carga, ventoX, ventoY)
 controlador.m = planta.m;
 controlador.g = planta.g;
-
+dt = 1e-3;
+psir.time = [0; 1 - dt; tf];
+psir.signals.values = zeros(length(psir.time), 1);
 % Configurando as variaveis usadas no Simulink
 assignin('base', 'xr', xr);
 assignin('base', 'yr', yr);
 assignin('base', 'zr', zr);
+assignin('base', 'psir', psir);
 assignin('base', 'x0', 0);
 assignin('base', 'y0', 0);
 assignin('base', 'z0', 0);
