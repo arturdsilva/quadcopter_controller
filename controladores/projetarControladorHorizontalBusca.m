@@ -14,7 +14,8 @@ Mps = linspace(0.8 * requisitosX.Mp, 1.2 * requisitosX.Mp, N);
 % Iterar sobre a grade de trs e Mps para determinar o par tr e Mp que
 % melhor atende aos requisitos
 
-JMin = 2;
+JMin = inf;
+
 for i = 1:N
     for j = 1:N
         requisitosProv.tr = trs(i);

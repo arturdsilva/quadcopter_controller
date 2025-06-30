@@ -2,8 +2,7 @@
 
 function controlador = projetarControladorRolagem(requisitos, planta)
 
-xi = sqrt((log(requisitos.Mp))^2 / (pi^2 + (log(requisitos.Mp))^2));
-wn = (pi - acos(xi)) / (requisitos.tr * sqrt(1 - xi^2));
-controlador.Kv = 2 * wn * xi * planta.J;
-controlador.Kp = wn / (2 * xi);
+controlador.Kd = 7 * planta.J * requisitos.xi * requisitos.wn;
+controlador.Kp = requisitos.wn^2 * planta.J * (1 + 10 * requisitos.xi^2);
+controlador.Ki = 5 * planta.J * requisitos.xi * requisitos.wn^3;
 end

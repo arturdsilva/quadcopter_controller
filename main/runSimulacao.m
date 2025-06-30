@@ -11,7 +11,7 @@ planta = obterPlantaMulticoptero();
 requisitos = obterRequisitos();
 controlador = projetarControladorMulticoptero(requisitos, planta);
 
-experimento = 'h';
+experimento = 'e';
 
 simulacao = simularExperimentoMulticoptero(controlador, planta, experimento);
 fazerAnimacaoMulticoptero(simulacao, planta);
