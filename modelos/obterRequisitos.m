@@ -11,7 +11,7 @@ requisitos.theta.tr = 0.1;
 requisitos.theta.Mp = 0.05;
 requisitos.phi.tr = 0.1;
 requisitos.phi.Mp = 0.05;
-requisitos.psi.tr = 0.3;
+requisitos.psi.tr = 0.4;
 requisitos.psi.Mp = 0.05;
 
 end
