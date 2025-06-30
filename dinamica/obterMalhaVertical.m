@@ -3,6 +3,7 @@
 function dinamica = obterMalhaVertical(controlador, planta)
 
 s = tf('s');
-dinamica = (controlador.Ki/controlador.Kd) / ( s^2 + ...
-    (controlador.Kp/controlador.Kd) * s + controlador.Ki/controlador.Kd);
+numerador = controlador.Ki / planta.m;
+denominador = s^3 + (controlador.Kd/planta.m)*s^2 + (controlador.Kp*s)/planta.m + controlador.Ki / planta.m;
+dinamica = numerador / denominador;
 end
