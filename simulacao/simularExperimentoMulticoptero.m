@@ -73,28 +73,21 @@ elseif experimento == 'f'
      zr.signals.values = [2; 2; sin(2 * 2 * pi * (t - 1) / (tf - 2)) + 2; 2];
      simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr, 0, 0, 0);
 elseif experimento == 'h'
-    tf = 20;                 % tempo total
-    n_voltas = 2;            % número de voltas na espiral
-    raio = 1;                % raio da espiral
-    altura_final = 1;        % altura que se deseja atingir
-    
-    t = (1+dt:dt:(tf-1))';   % vetor de tempo para interpolação
-
-    % Posições de referência ao longo da espiral
+    tf = 20;
+    n_voltas = 2;
+    raio = 1;
+    altura_final = 1; 
+    t = (1+dt:dt:(tf-1))';
     angulo = 2 * pi * n_voltas * (t - 1) / (tf - 2);
     xr_values = raio * cos(angulo);
     yr_values = raio * sin(angulo);
     zr_values = altura_final * (t - 1) / (tf - 2);  % rampa de z=0 a z=1
-
     xr.time = [0; 1; t; tf];
     xr.signals.values = [0; 0; xr_values; xr_values(end)];
-
     yr.time = [0; 1; t; tf];
     yr.signals.values = [0; 0; yr_values; yr_values(end)];
-
     zr.time = [0; 1; t; tf];
     zr.signals.values = [0; 0; zr_values; zr_values(end)];
-
     simulacao = simularMulticoptero(controlador, planta, tf, xr, yr, zr, 0, 0, 0);
 
 end
