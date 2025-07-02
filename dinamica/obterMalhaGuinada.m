@@ -3,7 +3,7 @@
 function dinamica = obterMalhaGuinada(controlador, planta)
 
 s = tf('s');
-numerador = controlador.Ki / planta.Jz;
-denominador = s^3 + (controlador.Kd/planta.Jz)*s^2 + (controlador.Kp*s)/planta.Jz + controlador.Ki / planta.Jz;
+numerador = controlador.Kp / planta.Jz;
+denominador = s^2 + (controlador.Kd*s)/planta.Jz + controlador.Kp / planta.Jz;
 dinamica = numerador / denominador;
 end
