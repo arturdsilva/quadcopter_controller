@@ -19,15 +19,12 @@ tauz = simulacao.tauz.signals.values;
 l = planta.l;
 
 % Para ajustar os eixos do gráfico 3D
-minX = min(min(x), min(xr)) - l;
-maxX = max(max(x), max(xr)) + l;
-minY = min(min(y), min(yr)) - l;
-maxY = max(max(y), max(yr)) + l;
-minZ = min(min(z), min(zr)) - l;
-maxZ = max(max(z), max(zr)) + l;
-
-% Garantir que o eixo Z não fique negativo
-minZ = max(minZ, 0);
+minX = min(xr) - 0.5;
+maxX = max(xr) + 0.5;
+minY = min(yr) - 0.5;
+maxY = max(yr) + 0.5;
+minZ = 0;
+maxZ = max(zr) + 0.5;
 
 dt = 1 / 60;
 tempoVideo = t(1):dt:t(end);
@@ -117,7 +114,22 @@ camlight('headlight');
 lighting gouraud;
 
 % Adicionar um plano de referência (chão)
-[X_chao, Y_chao] = meshgrid(minX:0.5:maxX, minY:0.5:maxY);
+passoChao = max(0.1, (maxX-minX)/10); % passo adaptativo, nunca menor que 0.1
+if maxX == minX
+    X_chao = minX;
+else
+    X_chao = minX:passoChao:maxX;
+end
+if maxY == minY
+    Y_chao = minY;
+else
+    Y_chao = minY:passoChao:maxY;
+end
+[X_chao, Y_chao] = meshgrid(X_chao, Y_chao);
+if numel(X_chao) < 4  % Garante pelo menos 2x2
+    X_chao = [minX maxX; minX maxX];
+    Y_chao = [minY minY; maxY maxY];
+end
 Z_chao = zeros(size(X_chao));
 surf(X_chao, Y_chao, Z_chao, 'FaceColor', [0.2 0.2 0.2], 'FaceAlpha', 0.4, 'EdgeColor', 'none');
 
@@ -132,8 +144,14 @@ set(leg, 'Color', 'k');               % Fundo preto
 set(leg, 'EdgeColor', 'w');           % Borda branca
 set(leg, 'FontSize', 10);             % Tamanho da fonte (opcional)
 
+% Garantir que a pasta de resultados existe
+outputDir = fullfile('..', 'resultados');
+if ~exist(outputDir, 'dir')
+    mkdir(outputDir);
+end
+
 % Para salvar vídeo
-video = VideoWriter(fullfile('..', 'resultados', sprintf('multicoptero_3d_%c.avi', simulacao.experimento)));
+video = VideoWriter(fullfile(outputDir, sprintf('multicoptero_3d_%c.avi', simulacao.experimento)));
 video.FrameRate = 60;
 video.Quality = 100;
 open(video);
