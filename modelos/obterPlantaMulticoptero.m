@@ -1,8 +1,8 @@
 function planta = obterPlantaMulticoptero()
-planta.m = 0.5;
-planta.J = 0.04;
-planta.Jz = 0.08;
-planta.l = 0.2;
+planta.m = 0.468;
+planta.J = 0.004856;
+planta.Jz = 0.008801;
+planta.l = 0.225;
 planta.g = 9.81;
 planta.k = 2.98*10^(-6);
 planta.b = 1.14*10^(-7);
