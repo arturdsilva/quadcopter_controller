@@ -19,12 +19,12 @@ tauz = simulacao.tauz.signals.values;
 l = planta.l;
 
 % Para ajustar os eixos do gráfico 3D
-minX = min(xr) - 0.5;
-maxX = max(xr) + 0.5;
-minY = min(yr) - 0.5;
-maxY = max(yr) + 0.5;
-minZ = 0;
-maxZ = max(zr) + 0.5;
+minX = min(xr) - l*5;
+maxX = max(xr) + l*5;
+minY = min(yr) - l*5;
+maxY = max(yr) + l*5;
+minZ = -0.5;
+maxZ = max(zr) + l*2;
 
 dt = 1 / 60;
 tempoVideo = t(1):dt:t(end);
@@ -51,7 +51,7 @@ f3 = f / 4.0 - taux / l;                    % Rotor traseiro
 f4 = f / 4.0 - tauy / l;                    % Rotor esquerdo
 
 % Fator de escala para visualização das forças
-escalaForca = 0.05;
+escalaForca = 1;
 f1 = escalaForca * f1;
 f2 = escalaForca * f2;
 f3 = escalaForca * f3;
@@ -65,41 +65,41 @@ hold on;
 [r1, r2, r3, r4] = computarPontosMulticoptero3D(x(1), y(1), z(1), theta(1), phi(1), psi(1), l);
 
 % Desenho inicial do quadricóptero
-handleReferencia = plot3(xr(1), yr(1), zr(1), 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');
+handleReferencia = plot3(xr(1), yr(1), zr(1), 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r');
 
 % Chassi do quadricóptero (cruz) - configuração +
-handleChassiFrontal = plot3([r1(1), r3(1)], [r1(2), r3(2)], [r1(3), r3(3)], 'w-', 'LineWidth', 4);
-handleChassisLateral = plot3([r2(1), r4(1)], [r2(2), r4(2)], [r2(3), r4(3)], 'w-', 'LineWidth', 4);
+handleChassiFrontal = plot3([r1(1), r3(1)], [r1(2), r3(2)], [r1(3), r3(3)], 'w-', 'LineWidth', 6);
+handleChassisLateral = plot3([r2(1), r4(1)], [r2(2), r4(2)], [r2(3), r4(3)], 'w-', 'LineWidth', 6);
 
 % Centro do quadricóptero
-handleCentro = plot3(x(1), y(1), z(1), 'go', 'MarkerSize', 8, 'MarkerFaceColor', 'g');
+handleCentro = plot3(x(1), y(1), z(1), 'go', 'MarkerSize', 11, 'MarkerFaceColor', 'g');
 
 % Rotores (representados como círculos)
-[xCirc, yCirc, zCirc] = criarCirculoRotor(r1, l/8);
+[xCirc, yCirc, zCirc] = criarCirculoRotor(r1, 1.5/8);
 handleRotor1 = plot3(xCirc, yCirc, zCirc, 'c-', 'LineWidth', 2);
-[xCirc, yCirc, zCirc] = criarCirculoRotor(r2, l/8);
+[xCirc, yCirc, zCirc] = criarCirculoRotor(r2, 1.5/8);
 handleRotor2 = plot3(xCirc, yCirc, zCirc, 'c-', 'LineWidth', 2);
-[xCirc, yCirc, zCirc] = criarCirculoRotor(r3, l/8);
+[xCirc, yCirc, zCirc] = criarCirculoRotor(r3, 1.5/8);
 handleRotor3 = plot3(xCirc, yCirc, zCirc, 'c-', 'LineWidth', 2);
-[xCirc, yCirc, zCirc] = criarCirculoRotor(r4, l/8);
+[xCirc, yCirc, zCirc] = criarCirculoRotor(r4, 1.5/8);
 handleRotor4 = plot3(xCirc, yCirc, zCirc, 'c-', 'LineWidth', 2);
 
 % Vetores de força (thrust)
-handleF1 = quiver3(r1(1), r1(2), r1(3), 0, 0, f1(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
-handleF2 = quiver3(r2(1), r2(2), r2(3), 0, 0, f2(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
-handleF3 = quiver3(r3(1), r3(2), r3(3), 0, 0, f3(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
-handleF4 = quiver3(r4(1), r4(2), r4(3), 0, 0, f4(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 0.1);
+handleF1 = quiver3(r1(1), r1(2), r1(3), 0, 0, f1(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 3);
+handleF2 = quiver3(r2(1), r2(2), r2(3), 0, 0, f2(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 3);
+handleF3 = quiver3(r3(1), r3(2), r3(3), 0, 0, f3(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 3);
+handleF4 = quiver3(r4(1), r4(2), r4(3), 0, 0, f4(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 3);
 
 % Seta indicadora da direção frontal do quadricóptero
 [direcaoFrontal] = computarDirecaoFrontal(x(1), y(1), z(1), psi(1), l);
-handleDirecao = quiver3(x(1), y(1), z(1), direcaoFrontal(1), direcaoFrontal(2), 0, 'm', 'LineWidth', 3, 'MaxHeadSize', 0.2);
+handleDirecao = quiver3(x(1), y(1), z(1) + 0.1 , direcaoFrontal(1), direcaoFrontal(2), 0, 'm', 'LineWidth', 3, 'MaxHeadSize', 2);
 
 % Trajetória
-handleTrajetoria = plot3(x(1), y(1), z(1), 'b-', 'LineWidth', 1);
+handleTrajetoria = plot3(x(1), y(1), z(1), 'b-', 'LineWidth', 1.4);
 
 % Configuração dos eixos
 axis([minX, maxX, minY, maxY, minZ, maxZ]);
-axis equal;
+axis manual;
 grid on;
 xlabel('X (m)', 'FontSize', 13, 'Color', 'w');
 ylabel('Y (m)', 'FontSize', 13, 'Color', 'w');
@@ -112,26 +112,6 @@ set(gca, 'GridColor', 'w', 'GridAlpha', 0.6);
 view(45, 30);
 camlight('headlight');
 lighting gouraud;
-
-% Adicionar um plano de referência (chão)
-passoChao = max(0.1, (maxX-minX)/10); % passo adaptativo, nunca menor que 0.1
-if maxX == minX
-    X_chao = minX;
-else
-    X_chao = minX:passoChao:maxX;
-end
-if maxY == minY
-    Y_chao = minY;
-else
-    Y_chao = minY:passoChao:maxY;
-end
-[X_chao, Y_chao] = meshgrid(X_chao, Y_chao);
-if numel(X_chao) < 4  % Garante pelo menos 2x2
-    X_chao = [minX maxX; minX maxX];
-    Y_chao = [minY minY; maxY maxY];
-end
-Z_chao = zeros(size(X_chao));
-surf(X_chao, Y_chao, Z_chao, 'FaceColor', [0.2 0.2 0.2], 'FaceAlpha', 0.4, 'EdgeColor', 'none');
 
 %Legenda:
 leg = legend([handleReferencia, handleCentro, handleChassiFrontal, handleRotor1, handleF1, handleDirecao, handleTrajetoria], ...
@@ -183,24 +163,24 @@ for i = 2:length(tempoVideo)
     set(handleChassisLateral, 'XData', [r2(1), r4(1)], 'YData', [r2(2), r4(2)], 'ZData', [r2(3), r4(3)]);
     
     % Atualizar rotores
-    [xCirc, yCirc, zCirc] = criarCirculoRotor(r1, l/8);
+    [xCirc, yCirc, zCirc] = criarCirculoRotor(r1, 1.5/8);
     set(handleRotor1, 'XData', xCirc, 'YData', yCirc, 'ZData', zCirc);
-    [xCirc, yCirc, zCirc] = criarCirculoRotor(r2, l/8);
+    [xCirc, yCirc, zCirc] = criarCirculoRotor(r2, 1.5/8);
     set(handleRotor2, 'XData', xCirc, 'YData', yCirc, 'ZData', zCirc);
-    [xCirc, yCirc, zCirc] = criarCirculoRotor(r3, l/8);
+    [xCirc, yCirc, zCirc] = criarCirculoRotor(r3, 1.5/8);
     set(handleRotor3, 'XData', xCirc, 'YData', yCirc, 'ZData', zCirc);
-    [xCirc, yCirc, zCirc] = criarCirculoRotor(r4, l/8);
+    [xCirc, yCirc, zCirc] = criarCirculoRotor(r4, 1.5/8);
     set(handleRotor4, 'XData', xCirc, 'YData', yCirc, 'ZData', zCirc);
     
     % Atualizar vetores de força
-    set(handleF1, 'XData', r1(1), 'YData', r1(2), 'ZData', r1(3), 'UData', 0, 'VData', 0, 'WData', f1(i));
-    set(handleF2, 'XData', r2(1), 'YData', r2(2), 'ZData', r2(3), 'UData', 0, 'VData', 0, 'WData', f2(i));
-    set(handleF3, 'XData', r3(1), 'YData', r3(2), 'ZData', r3(3), 'UData', 0, 'VData', 0, 'WData', f3(i));
-    set(handleF4, 'XData', r4(1), 'YData', r4(2), 'ZData', r4(3), 'UData', 0, 'VData', 0, 'WData', f4(i));
+    set(handleF1, 'XData', r1(1), 'YData', r1(2), 'ZData', r1(3), 'UData', 0, 'VData', 0, 'WData', f1(i), 'LineWidth', 2, 'MaxHeadSize', 3);
+    set(handleF2, 'XData', r2(1), 'YData', r2(2), 'ZData', r2(3), 'UData', 0, 'VData', 0, 'WData', f2(i), 'LineWidth', 2, 'MaxHeadSize', 3);
+    set(handleF3, 'XData', r3(1), 'YData', r3(2), 'ZData', r3(3), 'UData', 0, 'VData', 0, 'WData', f3(i), 'LineWidth', 2, 'MaxHeadSize', 3);
+    set(handleF4, 'XData', r4(1), 'YData', r4(2), 'ZData', r4(3), 'UData', 0, 'VData', 0, 'WData', f4(i), 'LineWidth', 2, 'MaxHeadSize', 3);
     
     % Atualizar direção frontal
     [direcaoFrontal] = computarDirecaoFrontal(x(i), y(i), z(i), psi(i), l);
-    set(handleDirecao, 'XData', x(i), 'YData', y(i), 'ZData', z(i), 'UData', direcaoFrontal(1), 'VData', direcaoFrontal(2), 'WData', 0);
+    set(handleDirecao, 'XData', x(i), 'YData', y(i), 'ZData',  z(i) + 0.05, 'UData', direcaoFrontal(1), 'VData', direcaoFrontal(2), 'WData', 0, 'LineWidth', 2, 'MaxHeadSize', 1);
     
     % Atualizar trajetória
     trajX = [trajX, x(i)];
