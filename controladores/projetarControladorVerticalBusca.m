@@ -1,6 +1,6 @@
 % Função para o projeto do controlador de Vertical Busca
-
 function controlador = projetarControladorVerticalBusca(requisitos, planta)
+
 root = fileparts(mfilename('fullpath'));
 addpath(fullfile(root, '..', 'dinamica'));
 
@@ -23,7 +23,7 @@ for i = 1:N
         dinamica = obterMalhaVertical(controlador_proj , planta);
         info = stepinfo(dinamica, 'RiseTimeLimits', [0, 1]);
         J = abs((info.RiseTime - requisitos.tr) / requisitos.tr) + ...
-                  abs((info.Overshoot/100 - requisitos.Mp) / requisitos.Mp);
+            abs((info.Overshoot/100 - requisitos.Mp) / requisitos.Mp);
         if JMin > J
             JMin = J;
             controladorMin = controlador_proj;
@@ -34,4 +34,5 @@ end
 controlador.Kd = controladorMin.Kd;
 controlador.Kp = controladorMin.Kp;
 controlador.Ki = controladorMin.Ki;
+
 end

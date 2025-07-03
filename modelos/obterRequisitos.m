@@ -1,4 +1,3 @@
-% Modelagem da planta e estruturas de requisitos
 function requisitos = obterRequisitos()
 
 requisitos.x.tr = 1.2;
