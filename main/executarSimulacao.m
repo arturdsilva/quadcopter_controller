@@ -1,4 +1,5 @@
 % Código principal que define planta, requisitos, executa simulação e animação
+function executarSimulacao(idDoExperimento)
 
 root = fileparts(mfilename('fullpath'));
 addpath(fullfile(root, '..', 'dinamica'));
@@ -11,7 +12,14 @@ planta = obterPlantaMulticoptero();
 requisitos = obterRequisitos();
 controlador = projetarControladorMulticoptero(requisitos, planta);
 
-experimento = 'b';
+switch idDoExperimento
+    case {'a','b','c','d','e','f','g','h'}
+        experimento = idDoExperimento;
+    otherwise
+        error('Experimento inválido. Use uma letra de a a h.');
+end
 
 simulacao = simularExperimentoMulticoptero(controlador, planta, experimento);
 fazerAnimacaoMulticoptero(simulacao, planta);
+
+end
