@@ -21,5 +21,6 @@ end
 
 simulacao = simularExperimentoMulticoptero(controlador, planta, experimento);
 fazerAnimacaoMulticoptero(simulacao, planta);
+tracarGraficos(simulacao);
 
 end
