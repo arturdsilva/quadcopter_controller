@@ -102,7 +102,7 @@ grid on;
 xlabel('X (m)', 'FontSize', 13, 'Color', 'w');
 ylabel('Y (m)', 'FontSize', 13, 'Color', 'w');
 zlabel('Z (m)', 'FontSize', 13, 'Color', 'w');
-title('Simulação 3D do Quadricóptero com Guinada', 'FontSize', 14, 'Color', 'w');
+title('Simulação de Trajetória 3D do Quadricóptero', 'FontSize', 14, 'Color', 'w');
 set(gca, 'FontSize', 13, 'Color', 'k', 'XColor', 'w', 'YColor', 'w', 'ZColor', 'w');
 set(gca, 'GridColor', 'w', 'GridAlpha', 0.6);
 
@@ -141,9 +141,12 @@ frame = getframe(gcf);
 writeVideo(video, frame);
 
 % Variáveis para armazenar trajetória
-trajX = x(1);
-trajY = y(1);
-trajZ = z(1);
+trajX = zeros(1, length(tempoVideo));
+trajY = zeros(1, length(tempoVideo));
+trajZ = zeros(1, length(tempoVideo));
+trajX(1) = x(1);
+trajY(1) = y(1);
+trajZ(1) = z(1);
 
 % Loop de animação
 for i = 2:length(tempoVideo)
@@ -181,10 +184,10 @@ for i = 2:length(tempoVideo)
     set(handleDirecao, 'XData', x(i), 'YData', y(i), 'ZData',  z(i) + 0.05, 'UData', direcaoFrontal(1), 'VData', direcaoFrontal(2), 'WData', 0, 'LineWidth', 2, 'MaxHeadSize', 1);
     
     % Atualizar trajetória
-    trajX = [trajX, x(i)];
-    trajY = [trajY, y(i)];
-    trajZ = [trajZ, z(i)];
-    set(handleTrajetoria, 'XData', trajX, 'YData', trajY, 'ZData', trajZ);
+    trajX(i) = x(i);
+    trajY(i) = y(i);
+    trajZ(i) = z(i);
+    set(handleTrajetoria, 'XData', trajX(1:i), 'YData', trajY(1:i), 'ZData', trajZ(1:i));
     
     drawnow;
     pause(dt);

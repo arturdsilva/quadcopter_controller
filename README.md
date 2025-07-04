@@ -20,7 +20,7 @@ O controle de veículos aéreos não tripulados (VANTs), como quadricópteros, �
 2. **Execute o script principal** passando a letra do experimento desejado (de `'a'` a `'h'`):
 
    ```matlab
-   executarSimulacao('g')
+   executarSimulacao('f')
    ```
 
    Isso irá:
