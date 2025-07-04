@@ -15,7 +15,6 @@ psi = simulacao.psi.signals.values;
 f = simulacao.f.signals.values;
 tauy = simulacao.tauy.signals.values;
 taux = simulacao.taux.signals.values;
-tauz = simulacao.tauz.signals.values;
 l = planta.l;
 
 % Para ajustar os eixos do gráfico 3D
@@ -42,7 +41,6 @@ psi = interp1(t, psi, tempoVideo);
 f = interp1(t, f, tempoVideo);
 taux = interp1(t, taux, tempoVideo);
 tauy = interp1(t, tauy, tempoVideo);
-tauz = interp1(t, tauz, tempoVideo);
 
 % Calculando forças individuais dos rotores (configuração +)
 f1 = f / 4.0 + taux / l;                    % Rotor frontal
@@ -91,8 +89,8 @@ handleF3 = quiver3(r3(1), r3(2), r3(3), 0, 0, f3(1), 'y', 'LineWidth', 2, 'MaxHe
 handleF4 = quiver3(r4(1), r4(2), r4(3), 0, 0, f4(1), 'y', 'LineWidth', 2, 'MaxHeadSize', 3);
 
 % Seta indicadora da direção frontal do quadricóptero
-[direcaoFrontal] = computarDirecaoFrontal(x(1), y(1), z(1), psi(1), l);
-handleDirecao = quiver3(x(1), y(1), z(1) + 0.1 , direcaoFrontal(1), direcaoFrontal(2), 0, 'm', 'LineWidth', 3, 'MaxHeadSize', 2);
+[direcaoFrontal] = computarDirecaoFrontal(psi(1), l);
+handleDirecao = quiver3(x(1), y(1), z(1)  + 0.05 , direcaoFrontal(1), direcaoFrontal(2), 0, 'm', 'LineWidth', 3, 'MaxHeadSize', 2);
 
 % Trajetória
 handleTrajetoria = plot3(x(1), y(1), z(1), 'b-', 'LineWidth', 1.4);
@@ -179,7 +177,7 @@ for i = 2:length(tempoVideo)
     set(handleF4, 'XData', r4(1), 'YData', r4(2), 'ZData', r4(3), 'UData', 0, 'VData', 0, 'WData', f4(i), 'LineWidth', 2, 'MaxHeadSize', 3);
     
     % Atualizar direção frontal
-    [direcaoFrontal] = computarDirecaoFrontal(x(i), y(i), z(i), psi(i), l);
+    [direcaoFrontal] = computarDirecaoFrontal(psi(i), l);
     set(handleDirecao, 'XData', x(i), 'YData', y(i), 'ZData',  z(i) + 0.05, 'UData', direcaoFrontal(1), 'VData', direcaoFrontal(2), 'WData', 0, 'LineWidth', 2, 'MaxHeadSize', 1);
     
     % Atualizar trajetória
@@ -242,7 +240,7 @@ r4 = [x, y, z] + (R * r4_local')';
 
 end
 
-function [direcaoFrontal] = computarDirecaoFrontal(x, y, z, psi, l)
+function [direcaoFrontal] = computarDirecaoFrontal(psi, l)
 % Computa a direção frontal do quadricóptero baseada no ângulo de guinada
 % Para configuração +, a frente é ao longo do eixo X local
 % Retorna um vetor que aponta na direção frontal
