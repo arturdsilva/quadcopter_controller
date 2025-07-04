@@ -12,6 +12,8 @@
 *.out
 *.log
 *.txt
+*.png
+*.eps
 
 # Vídeos gerados
 *.avi

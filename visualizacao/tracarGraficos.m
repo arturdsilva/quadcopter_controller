@@ -104,10 +104,10 @@ end
 
 % Salva o gráfico na pasta resultados.
 function salvarGrafico(nome, formato)
-if ~exist('resultados', 'dir')
-    mkdir('resultados');
+if ~exist('../resultados', 'dir')
+    mkdir('../resultados');
 end
-nomeCompleto = fullfile('resultados', nome);
+nomeCompleto = fullfile('../resultados', nome);
 if strcmp(formato, 'png')
     print('-dpng', '-r400', nomeCompleto);
 else
